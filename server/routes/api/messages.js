@@ -4,6 +4,7 @@ const onlineUsers = require("../../onlineUsers");
 
 // expects {recipientId, text, conversationId } in body (conversationId will be null if no conversation exists yet)
 router.post("/", async (req, res, next) => {
+  console.log('Request: ', req.user);
   try {
     if (!req.user) {
       return res.sendStatus(401);
@@ -11,17 +12,24 @@ router.post("/", async (req, res, next) => {
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
 
-    // if we already know conversation id, we can save time and just add it to message and return
-    if (conversationId) {
-      const message = await Message.create({ senderId, text, conversationId });
-      return res.json({ message, sender });
-    }
-    // if we don't have conversation id, find a conversation to make sure it doesn't already exist
+    // determine whether conversation exists
     let conversation = await Conversation.findConversation(
       senderId,
       recipientId
     );
 
+    // if we already know conversation id, we can save time and just add it to message and return
+    if (conversationId && conversation) {
+      const message = await Message.create({ senderId, text, conversationId });
+      return res.json({ message, sender });
+    }
+
+    // if conversation id is provided, but the sender is not included in that conversation
+    if (conversationId && !conversation) {
+      res.status(403).send('You are not a participant of this conversation.');
+    }
+
+    // if we don't have conversation id
     if (!conversation) {
       // create conversation
       conversation = await Conversation.create({
