@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
     }
 
     // if conversation id is provided, but the sender is not included in that conversation
-    if (conversationId && !conversation) {
+    if (conversationId && !(conversation.user1Id === senderId || conversation.user2Id === senderId)) {
       res.status(403).send('You are not a participant of this conversation.');
     }
 
@@ -34,6 +34,8 @@ router.post("/", async (req, res, next) => {
       conversation = await Conversation.create({
         user1Id: senderId,
         user2Id: recipientId,
+        user1Check: new Date(),
+        user2Check: new Date('January 1, 1980 01:00:00')
       });
       if (onlineUsers.includes(sender.id)) {
         sender.online = true;

@@ -116,3 +116,8 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const updateConversation = async (body) => {
+  const data = await axios.put('/api/conversations', body);
+  return data;
+}

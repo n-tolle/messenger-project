@@ -4,6 +4,8 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { updateConversation } from '../../store/utils/thunkCreators';
+import moment from 'moment';
 
 const styles = {
   root: {
@@ -21,12 +23,26 @@ const styles = {
 
 class Chat extends Component {
   handleClick = async (conversation) => {
+    if (conversation.messages.length > 0) {
+      let time = new Date();
+      console.log('WHY ARE YOU DOING THIS?: ', conversation);
+      let currentUser = conversation.otherUser.id === conversation.user1Id ? conversation.user2Id : conversation.user1Id;
+      let body = {
+        time: time,
+        currentUser: currentUser,
+        otherUser: conversation.otherUser.id
+      };
+      await updateConversation(body);
+    }
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 
   render() {
     const { classes } = this.props;
     const otherUser = this.props.conversation.otherUser;
+    const currentUser = this.props.conversation.otherUser.id === this.props.conversation.user1Id ? 2 : 1;
+    const pending = this.props.conversation.messages.filter(message => moment(this.props.conversation[`user${currentUser}Check`]).isBefore(message.createdAt)).length;
+
     return (
       <Box
         onClick={() => this.handleClick(this.props.conversation)}
@@ -38,7 +54,7 @@ class Chat extends Component {
           online={otherUser.online}
           sidebar={true}
         />
-        <ChatContent conversation={this.props.conversation} />
+        <ChatContent conversation={this.props.conversation} pending={pending} />
       </Box>
     );
   }

@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
           user2Id: userId,
         },
       },
-      attributes: ["id"],
+      attributes: ["id", "user1Check", "user2Check", "user1Id", "user2Id"],
       order: [[Message, "createdAt", "DESC"]],
       include: [
         { model: Message, order: ["createdAt", "DESC"] },
@@ -82,6 +82,17 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.put('/', async (req, res, next) => {
+  const conversation = await Conversation.findConversation(req.body.currentUser, req.body.otherUser);
+  let update;
+  if (req.body.currentUser === conversation.user1Id) {
+    update = await Conversation.updateConversation(1, req.body.time, conversation);
+  } else {
+    update = await Conversation.updateConversation(2, req.body.time, conversation);
+  }
+  res.json(update);
 });
 
 module.exports = router;
