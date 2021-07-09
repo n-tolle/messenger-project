@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
+const { url } = require('./info')
 
-const db = new Sequelize(process.env.DATABASE_URL || "postgres://nicholastolle@localhost:5432/messenger", {
+const db = new Sequelize(process.env.DATABASE_URL || url, {
   logging: false
 });
 
