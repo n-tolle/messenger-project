@@ -50,6 +50,7 @@ export const login = (credentials) => async (dispatch) => {
     const { data } = await axios.post("/auth/login", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
+    socket.auth = { credentials };
     socket.emit("go-online", data.id);
   } catch (error) {
     console.error(error);
