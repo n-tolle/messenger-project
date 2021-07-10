@@ -25,14 +25,16 @@ class Chat extends Component {
   handleClick = async (conversation) => {
     if (conversation.messages.length > 0) {
       let time = new Date();
-      console.log('WHY ARE YOU DOING THIS?: ', conversation);
       let currentUser = conversation.otherUser.id === conversation.user1Id ? conversation.user2Id : conversation.user1Id;
+      let currentId = currentUser === conversation.user1Id ? 1 : 2;
       let body = {
         time: time,
         currentUser: currentUser,
-        otherUser: conversation.otherUser.id
+        otherUser: conversation.otherUser.id,
+        conversationId: conversation.id,
+        userId: currentId,
       };
-      await updateConversation(body);
+      await this.props.updateConversation(body);
     }
     await this.props.setActiveChat(conversation.otherUser.username);
   };
@@ -64,6 +66,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
+    },
+    updateConversation: (info) => {
+      dispatch(updateConversation(info));
     },
   };
 };

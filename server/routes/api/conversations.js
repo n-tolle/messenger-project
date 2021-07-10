@@ -86,12 +86,7 @@ router.get("/", async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   const conversation = await Conversation.findConversation(req.body.currentUser, req.body.otherUser);
-  let update;
-  if (req.body.currentUser === conversation.user1Id) {
-    update = await Conversation.updateConversation(1, req.body.time, conversation);
-  } else {
-    update = await Conversation.updateConversation(2, req.body.time, conversation);
-  }
+  let update = await Conversation.updateConversation(req.body.userId, req.body.time, conversation);
   res.json(update);
 });
 

@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  updateUnread,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -117,7 +118,12 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
   }
 };
 
-export const updateConversation = async (body) => {
-  const data = await axios.put('/api/conversations', body);
-  return data;
-}
+export const updateConversation =  (body) => async (dispatch) => {
+  try {
+    const data = await axios.put('/api/conversations', body);
+    dispatch(updateUnread({ id: body.conversationId, user: body.userId, time: body.time }));
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
