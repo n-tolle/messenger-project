@@ -50,6 +50,7 @@ export const login = (credentials) => async (dispatch) => {
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.auth = { credentials };
+    socket.connect();
     socket.emit("go-online", data.id);
   } catch (error) {
     console.error(error);
