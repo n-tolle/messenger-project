@@ -53,8 +53,6 @@ router.post("/", async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   const messages = await Message.updateMessages(req.body.conversation, req.body.otherUser);
-  // console.log('GETTING CLOSER: ', messages[0].id);
-  // let update = await Message.updateMessages(messages);
   res.json(messages);
 });
 
