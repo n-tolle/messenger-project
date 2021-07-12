@@ -41,6 +41,7 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
+  socket.onAny((event, ...args) => console.log('SERVER SOCKET: ', event, args));
   socket.on("go-online", (id) => {
       if (!onlineUsers.includes(id)) {
         onlineUsers.push(id);
@@ -50,7 +51,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("new-message", (data) => {
-      console.log('NEW MESSAGE: ', data);
       socket.broadcast.emit("new-message", {
         message: data.message,
         sender: data.sender,

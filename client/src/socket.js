@@ -8,6 +8,8 @@ import {
 
 const socket = io(window.location.origin, { autoConnect: false });
 
+socket.onAny((event, ...args) => console.log('CLIENT SOCKET: ', event, args));
+
 socket.on("connect", () => {
   console.log("connected to server");
 });
@@ -20,7 +22,6 @@ socket.on("remove-offline-user", (id) => {
   store.dispatch(removeOfflineUser(id));
 });
 socket.on("new-message", (data) => {
-  console.log('CLIENT NEW MESSAGE: ', data);
   store.dispatch(setNewMessage(data.message, data.sender));
 });
 

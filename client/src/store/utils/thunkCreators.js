@@ -49,7 +49,6 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
-    console.log('WHAT IS DATA?', data);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.auth = { token: data.token };
