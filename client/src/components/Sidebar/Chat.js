@@ -4,7 +4,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
-import { updateConversation } from '../../store/utils/thunkCreators';
+// import { updateConversation } from '../../store/utils/thunkCreators';
 import moment from 'moment';
 
 const styles = {
@@ -23,27 +23,28 @@ const styles = {
 
 class Chat extends Component {
   handleClick = async (conversation) => {
-    if (conversation.messages.length > 0) {
-      let time = new Date();
-      let currentUser = conversation.otherUser.id === conversation.user1Id ? conversation.user2Id : conversation.user1Id;
-      let currentId = currentUser === conversation.user1Id ? 1 : 2;
-      let body = {
-        time: time,
-        currentUser: currentUser,
-        otherUser: conversation.otherUser.id,
-        conversationId: conversation.id,
-        userId: currentId,
-      };
-      await this.props.updateConversation(body);
-    }
+    // if (conversation.messages.length > 0) {
+    //   let time = new Date();
+    //   let currentUser = conversation.otherUser.id === conversation.user1Id ? conversation.user2Id : conversation.user1Id;
+    //   let currentId = currentUser === conversation.user1Id ? 1 : 2;
+    //   let body = {
+    //     time: time,
+    //     currentUser: currentUser,
+    //     otherUser: conversation.otherUser.id,
+    //     conversationId: conversation.id,
+    //     userId: currentId,
+    //   };
+    //   await this.props.updateConversation(body);
+    // }
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 
   render() {
     const { classes } = this.props;
     const otherUser = this.props.conversation.otherUser;
-    const currentUser = this.props.conversation.otherUser.id === this.props.conversation.user1Id ? 2 : 1;
-    const pending = this.props.conversation.messages.filter(message => moment(this.props.conversation[`user${currentUser}Check`]).isBefore(message.createdAt)).length;
+    // const currentUser = this.props.conversation.otherUser.id === this.props.conversation.user1Id ? 2 : 1;
+    // const pending = this.props.conversation.messages.filter(message => moment(this.props.conversation[`user${currentUser}Check`]).isBefore(message.createdAt)).length;
+    const pending = this.props.conversation.messages.filter(message => message.unread && message.senderId === otherUser.id).length;
 
     return (
       <Box
@@ -67,9 +68,9 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    updateConversation: (info) => {
-      dispatch(updateConversation(info));
-    },
+    // updateConversation: (info) => {
+    //   dispatch(updateConversation(info));
+    // },
   };
 };
 

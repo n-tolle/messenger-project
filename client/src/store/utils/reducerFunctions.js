@@ -83,11 +83,14 @@ export const addNewConvoToStore = (state, recipientId, message) => {
 };
 
 export const updateUnreadToStore = (state, payload) => {
-  const {id, user, time} = payload;
+  const { id } = payload;
   return state.map((convo) => {
     if (convo.id === id) {
       const convoCopy = { ...convo };
-      convoCopy[`user${user}Check`] = time;
+      convoCopy.messages.map(message => {
+        message.unread = false;
+        return message;
+      });
 
       return convoCopy;
     } else {

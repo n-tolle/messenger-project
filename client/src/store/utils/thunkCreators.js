@@ -118,10 +118,10 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
   }
 };
 
-export const updateConversation =  (body) => async (dispatch) => {
+export const updateMessages =  (body) => async (dispatch) => {
   try {
-    const data = await axios.put('/api/conversations', body);
-    dispatch(updateUnread({ id: body.conversationId, user: body.userId, time: body.time }));
+    const data = await axios.put('/api/messages', body);
+    dispatch(updateUnread({ id: body.conversationId }));
     return data;
   } catch (error) {
     console.log(error);

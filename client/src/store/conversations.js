@@ -69,10 +69,10 @@ export const addConversation = (recipientId, newMessage) => {
   };
 };
 
-export const updateUnread = (id, user, time) => {
+export const updateUnread = (id) => {
   return {
     type: UPDATE_UNREAD,
-    payload: { id, user, time },
+    payload: { id },
   };
 };
 
@@ -104,8 +104,6 @@ const reducer = (state = [], action) => {
         return updateUnreadToStore(
           state,
           action.payload.id,
-          action.payload.user,
-          action.payload.time
         );
     default:
       return state;
