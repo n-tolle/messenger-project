@@ -38,6 +38,7 @@ export const register = (credentials) => async (dispatch) => {
     const { data } = await axios.post("/auth/register", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
+    socket.auth = { token: data.token }
     socket.emit("go-online", data.id);
   } catch (error) {
     console.error(error);
@@ -48,9 +49,10 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
+    console.log('WHAT IS DATA?', data);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
-    socket.auth = { credentials };
+    socket.auth = { token: data.token };
     socket.connect();
     socket.emit("go-online", data.id);
   } catch (error) {
