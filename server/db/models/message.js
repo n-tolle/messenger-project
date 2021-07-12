@@ -19,7 +19,7 @@ const Message = db.define("message", {
 Message.findMessages = async function (conversation, senderId) {
   const messages = await Message.findAll({
     where: {
-      conversation: conversation,
+      conversationId: conversation,
       senderId: senderId
     }
   });
@@ -27,10 +27,14 @@ Message.findMessages = async function (conversation, senderId) {
   return messages;
 };
 
-Message.updateMessages = async function (messages) {
-  const updatedMessages = await messages.update({
+Message.updateMessages = async function (conversation, senderId) {
+  const updatedMessages = await Message.update({
     unread: false
-  });
+  }, {where:
+  {
+    conversationId: conversation,
+    senderId: senderId
+  }});
   return updatedMessages;
 };
 

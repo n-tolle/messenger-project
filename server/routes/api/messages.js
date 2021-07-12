@@ -34,8 +34,6 @@ router.post("/", async (req, res, next) => {
       conversation = await Conversation.create({
         user1Id: senderId,
         user2Id: recipientId,
-        // user1Check: new Date(),
-        // user2Check: new Date('January 1, 1980 01:00:00')
       });
       if (onlineUsers.includes(sender.id)) {
         sender.online = true;
@@ -54,9 +52,10 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put('/', async (req, res, next) => {
-  const messages = await Message.findMessages(req.body.conversation, req.body.otherUser);
-  let update = await Message.updateMessages(messages);
-  res.json(update);
+  const messages = await Message.updateMessages(req.body.conversation, req.body.otherUser);
+  // console.log('GETTING CLOSER: ', messages[0].id);
+  // let update = await Message.updateMessages(messages);
+  res.json(messages);
 });
 
 module.exports = router;
