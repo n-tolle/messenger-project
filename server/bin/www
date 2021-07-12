@@ -32,13 +32,21 @@ const server = http.createServer(app);
 const io = require("socket.io")(server);
 
 io.use((socket, next) => {
+<<<<<<< HEAD
   const user = socket.handshake.auth.token;
+=======
+  const user = socket.handshake.auth.credentials;
+>>>>>>> 7bd434222c7938280a8e77294250d2ff4ba40730
   if (!user) {
     return next(new Error('Invalid user.'));
   }
   socket.user = user;
   next();
+<<<<<<< HEAD
 });
+=======
+})
+>>>>>>> 7bd434222c7938280a8e77294250d2ff4ba40730
 
 io.on("connection", (socket) => {
   socket.onAny((event, ...args) => console.log('SERVER SOCKET: ', event, args));

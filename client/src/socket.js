@@ -7,8 +7,11 @@ import {
 } from "./store/conversations";
 
 const socket = io(window.location.origin, { autoConnect: false });
+<<<<<<< HEAD
 
 socket.onAny((event, ...args) => console.log('CLIENT SOCKET: ', event, args));
+=======
+>>>>>>> 7bd434222c7938280a8e77294250d2ff4ba40730
 
 socket.on("connect", () => {
   console.log("connected to server");
